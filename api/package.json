@@ -1,0 +1,22 @@
+{
+  "name": "api",
+  "version": "0.0.1",
+  "description": "A setlist app, probably",
+  "author": "Chester Carmer",
+  "license": "MIT",
+  "scripts": {
+    "start:dev": "tsc -w --preserveWatchOutput & nodemon ./dist/server.js"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^19.1.1",
+    "pg": "^8.2.1",
+    "typeorm": "^0.2.25"
+  },
+  "devDependencies": {
+    "@types/hapi__hapi": "^19.0.3",
+    "@types/node": "11.13.4",
+    "nodemon": "^2.0.4",
+    "prettier": "1.17.0",
+    "typescript": "3.7.2"
+  }
+}
