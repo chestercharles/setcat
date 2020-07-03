@@ -8,9 +8,8 @@ export const initApp = (db: Connection): Plugin<{}> => {
     register: async (server, options) => {
       server.route({
         method: 'GET',
-        path: '/howdy',
+        path: '/',
         handler: (request, h) => {
-          console.log('Handling');
           return 'Howdy, World!';
         },
       });

@@ -20,7 +20,7 @@ const initServer = async (db: Connection) => {
   const server = new Server({
     debug: { request: ['error'] },
     port: '9000',
-    host: 'localhost',
+    host: '0.0.0.0',
     routes: {
       cors: {
         origin: ['*'],
