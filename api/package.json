@@ -5,7 +5,8 @@
   "author": "Chester Carmer",
   "license": "MIT",
   "scripts": {
-    "start:dev": "tsc -w --preserveWatchOutput & nodemon ./dist/server.js"
+    "start:dev": "tsc -w --preserveWatchOutput & nodemon ./dist/server.js",
+    "compile": "rm -rf ./dist && tsc"
   },
   "dependencies": {
     "@hapi/hapi": "^19.1.1",
