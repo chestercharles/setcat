@@ -5,7 +5,7 @@ import { Repo } from './infra/repo';
 export const initServer = async (repo: Repo) => {
   const app = initApp(repo);
   const server = new Server({
-    debug: { request: ['error'] },
+    debug: process.env.NODE_ENV === 'test' ? false : { request: ['error'] },
     port: process.env.API_PORT,
     host: '0.0.0.0',
     routes: {
