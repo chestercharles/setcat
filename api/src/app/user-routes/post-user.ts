@@ -22,19 +22,7 @@ export const initPostUserRoute = (repo: Repo): ServerRoute => {
     },
     options: {
       validate: {
-        payload: object({
-          username: string()
-            .min(3)
-            .max(50)
-            .required(),
-          email: string()
-            .email()
-            .required(),
-          password: string()
-            .min(7)
-            .max(20)
-            .required(),
-        }),
+        payload: payloadValidationSchema,
       },
     },
   };
@@ -50,3 +38,17 @@ const handleException = (e: Error) => {
     throw internal(e.message);
   }
 };
+
+const payloadValidationSchema = object({
+  username: string()
+    .min(3)
+    .max(50)
+    .required(),
+  email: string()
+    .email()
+    .required(),
+  password: string()
+    .min(7)
+    .max(20)
+    .required(),
+});

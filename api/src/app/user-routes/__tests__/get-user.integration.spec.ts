@@ -19,7 +19,7 @@ describe('GET user', function() {
     await server.stop();
   });
 
-  it('responds user if passed uuid of existing user', async () => {
+  it('responds with user if passed uuid of existing user', async () => {
     const uuid = '123456';
     const username = 'Porky';
     const email = 'porkchop@sandwhich.com';
@@ -41,7 +41,7 @@ describe('GET user', function() {
       });
   });
 
-  it('does not return user password', async () => {
+  it('does not respond with user password', async () => {
     const uuid = '123456';
     const username = 'Porky';
     const email = 'porkchop@sandwhich.com';
@@ -58,6 +58,26 @@ describe('GET user', function() {
       .expect(200)
       .then(async res => {
         expect(typeof res.body.password).toBe('undefined');
+      });
+  });
+
+  it('responds with 404 if no user exists', async () => {
+    const uuid = '123456';
+
+    return supertest(server.listener)
+      .get('/user?uuid=' + uuid)
+      .expect(404)
+      .then(async res => {
+        expect(res.body.message).toBe('user not found');
+      });
+  });
+
+  it('responds with 400 if passed invalid parameters', async () => {
+    return supertest(server.listener)
+      .get('/user')
+      .expect(400)
+      .then(async res => {
+        expect(res.body.message).toBe('Invalid request query input');
       });
   });
 });
