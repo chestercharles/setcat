@@ -1,7 +1,6 @@
 import * as supertest from 'supertest';
 import { ApiServer, initServer } from '../../../server';
 import { initRepo, Repo } from '../../../infra/repo';
-import { resolve } from 'dns';
 
 describe('POST user', function() {
   let server: ApiServer;

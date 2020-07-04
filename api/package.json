@@ -8,6 +8,8 @@
     "start:dev:setup": "yarn setup && yarn start:dev",
     "test:integration:dev": "tsc -w --preserveWatchOutput & jest --runInBand --watchAll",
     "test:integration:dev:setup": "yarn setup && yarn test:integration:dev",
+    "test:unit:dev": "tsc -w --preserveWatchOutput & jest --runInBand --watchAll",
+    "test:unit:dev:setup": "yarn compile && yarn test:integration:dev",
     "compile": "rm -rf ./dist && tsc",
     "migration:run": "typeorm migration:run",
     "migration:create": "typeorm migration:create -n"
@@ -31,13 +33,5 @@
     "prettier": "1.17.0",
     "supertest": "^4.0.2",
     "typescript": "3.7.2"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js"
-    ],
-    "testMatch": [
-      "/**/__tests__/*spec.js"
-    ]
   }
 }
