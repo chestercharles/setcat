@@ -1,4 +1,5 @@
 import { ServerRoute, RequestWithPayload } from '@hapi/hapi';
+import { object, string } from '@hapi/joi';
 import { Repo } from '../../infra/repo';
 import { initCreateUser } from '../../domain/user/create-user';
 import { conflict, internal } from '@hapi/boom';
@@ -12,17 +13,40 @@ export const initPostUserRoute = (repo: Repo): ServerRoute => {
       request: RequestWithPayload<PostUserReqDTO>,
       h,
     ): Promise<PostUserResDTO> => {
-      const { username, password, email } = request.payload;
       try {
-        const user = await createUser({ username, password, email });
+        const user = await createUser(request.payload);
         return user;
       } catch (e) {
-        if (e.message === 'username is taken') {
-          throw conflict(e.message);
-        } else {
-          throw internal(e);
-        }
+        handleException(e);
       }
     },
+    options: {
+      validate: {
+        payload: object({
+          username: string()
+            .min(3)
+            .max(50)
+            .required(),
+          email: string()
+            .email()
+            .required(),
+          password: string()
+            .min(7)
+            .max(20)
+            .required(),
+        }),
+      },
+    },
   };
+};
+
+const handleException = (e: Error) => {
+  if (
+    e.message === 'username is taken' ||
+    e.message === 'email is registered'
+  ) {
+    throw conflict(e.message);
+  } else {
+    throw internal(e.message);
+  }
 };

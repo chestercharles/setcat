@@ -3,14 +3,14 @@ import { UserRepo } from '../../infra/user-repo/user-repo';
 
 export const initCreateUser = (userRepo: UserRepo) => {
   return async (params: PostUserReqDTO): Promise<PostUserResDTO> => {
-    const usernameIsTaken = await isUsernameTaken(params.username, userRepo);
-    if (usernameIsTaken) {
-      throw new Error('username is taken');
-    }
-
     const emailIsRegistered = await isEmailRegistered(params.email, userRepo);
     if (emailIsRegistered) {
       throw new Error('email is registered');
+    }
+
+    const usernameIsTaken = await isUsernameTaken(params.username, userRepo);
+    if (usernameIsTaken) {
+      throw new Error('username is taken');
     }
 
     const { uuid, email, username } = await saveUser(params, userRepo);
