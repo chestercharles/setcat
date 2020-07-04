@@ -6,7 +6,7 @@ export const initFindUserByUuid = (userRepo: UserRepo) => {
     if (!user) {
       throw new Error('user not found');
     }
-    return { uuid: user.uuid, email: user.email, username: user.email };
+    return { uuid: user.uuid, email: user.email, username: user.username };
   };
 };
 

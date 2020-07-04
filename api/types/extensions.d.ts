@@ -4,7 +4,7 @@ declare module '@hapi/hapi' {
   type RequestWithPayload<T> = Omit<Request, 'payload'> & {
     payload: T;
   };
-  type RequestWithParams<T> = Omit<Request, 'params'> & {
-    params: T;
+  type RequestWithQuery<T> = Omit<Request, 'query'> & {
+    query: T;
   };
 }

@@ -1,4 +1,4 @@
-import { ServerRoute, RequestWithParams } from '@hapi/hapi';
+import { ServerRoute, RequestWithQuery } from '@hapi/hapi';
 import { Repo } from '../../infra/repo';
 import { badRequest } from '@hapi/boom';
 import { initFindUserByUuid } from '../../domain/user/find-user-by-uuid';
@@ -9,12 +9,11 @@ export const initGetUser = (repo: Repo): ServerRoute => {
     method: 'GET',
     path: '/user',
     handler: async (
-      request: RequestWithParams<GetUserReqDTO>,
+      request: RequestWithQuery<GetUserReqDTO>,
       h,
     ): Promise<GetUserResDTO> => {
-      const { uuid } = request.params;
       try {
-        const user = await findUserByUuid(uuid);
+        const user = await findUserByUuid(request.query.uuid);
         return user;
       } catch (e) {
         badRequest(e);
