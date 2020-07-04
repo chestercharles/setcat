@@ -1,0 +1,10 @@
+{
+  "name": "setcat",
+  "version": "0.0.1",
+  "description": "A setlist app, probably",
+  "author": "Chester Carmer",
+  "license": "MIT",
+  "scripts": {
+    "publish-types": "cp -r shared/dto api/src/dto"
+  }
+}

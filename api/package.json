@@ -1,23 +1,41 @@
 {
   "name": "api",
   "version": "0.0.1",
-  "description": "A setlist app, probably",
-  "author": "Chester Carmer",
-  "license": "MIT",
   "scripts": {
-    "start:dev": "tsc -w --preserveWatchOutput & nodemon ./dist/server.js",
-    "compile": "rm -rf ./dist && tsc"
+    "start:dev": "tsc -w --preserveWatchOutput & nodemon ./dist/src/run-server.js",
+    "compile": "rm -rf ./dist && tsc",
+    "test:integration": "yarn compile && yarn migration:run && jest --runInBand",
+    "test:watch": "jest --watchAll",
+    "migration:run": "typeorm migration:run",
+    "migration:create": "typeorm migration:create -n"
   },
   "dependencies": {
+    "@hapi/boom": "^9.1.0",
     "@hapi/hapi": "^19.1.1",
     "pg": "^8.2.1",
-    "typeorm": "^0.2.25"
+    "typeorm": "^0.2.25",
+    "uuid": "^8.2.0"
   },
   "devDependencies": {
+    "@types/hapi__boom": "^9.0.1",
     "@types/hapi__hapi": "^19.0.3",
+    "@types/jest": "^26.0.3",
     "@types/node": "11.13.4",
+    "@types/supertest": "^2.0.10",
+    "@types/uuid": "^8.0.0",
+    "jest": "^26.1.0",
     "nodemon": "^2.0.4",
     "prettier": "1.17.0",
+    "supertest": "^4.0.2",
+    "ts-jest": "^26.1.1",
     "typescript": "3.7.2"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "testMatch": [
+      "/**/__tests__/*spec.js"
+    ]
   }
 }

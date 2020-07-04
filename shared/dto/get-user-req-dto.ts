@@ -1,0 +1,3 @@
+type GetUserReqDTO = {
+  uuid: string;
+};

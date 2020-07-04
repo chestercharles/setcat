@@ -1,25 +1,12 @@
 import { Server } from '@hapi/hapi';
-import { Connection } from 'typeorm';
-import { initDatabase } from './infra/initDatabase';
-import { initApp } from './app/initApp';
+import { initApp } from './app/app';
+import { Repo } from './infra/repo';
 
-console.log(`Running environment ${process.env.NODE_ENV || 'dev'}`);
-
-process.on('uncaughtException', (error: Error) => {
-  console.error(`uncaughtException ${error.message}`);
-  process.exit(1);
-});
-
-process.on('unhandledRejection', (reason: any) => {
-  console.error(`unhandledRejection ${reason}`);
-  process.exit(1);
-});
-
-const initServer = async (db: Connection) => {
-  const app = initApp(db);
+export const initServer = async (repo: Repo) => {
+  const app = initApp(repo);
   const server = new Server({
     debug: { request: ['error'] },
-    port: '9000',
+    port: process.env.API_PORT,
     host: '0.0.0.0',
     routes: {
       cors: {
@@ -29,7 +16,7 @@ const initServer = async (db: Connection) => {
   });
   await server.register(app);
   await server.start();
-  console.log(`Server running on ${server.info.uri}`);
+  return server;
 };
 
-initDatabase().then(initServer);
+export type ApiServer = ThenArg<ReturnType<typeof initServer>>;
