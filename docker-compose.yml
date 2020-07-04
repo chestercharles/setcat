@@ -4,19 +4,50 @@ services:
     build:
       context: ./api
     image: api
+    ports:
+      - "9000:9000"
     volumes:
       - ./api:/api:delegated
     depends_on:
       - postgres
-    env_file:
-      - .env
-    command: ["yarn", "test:integration"]
+    environment:
+      - NODE_ENV=development
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=database
+      - POSTGRES_PORT=5432
+      - API_PORT=9000
+    command: ["yarn", "start:dev:setup"]
+  api_integration_test:
+    build:
+      context: ./api
+    image: api
+    ports:
+      - "9001:9001"
+    volumes:
+      - ./api:/api:delegated
+    depends_on:
+      - postgres
+    environment:
+      - NODE_ENV=test
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=database_test
+      - POSTGRES_PORT=5432
+      - API_PORT=9001
+    command: ["yarn", "test:integration:dev:setup"]
   postgres:
     image: postgres:11.6
     ports:
       - "5432:5432"
-    env_file:
-      - .env
+    volumes:
+      - ./scripts/pg-init:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_MULTIPLE_DATABASES=database,database_test
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s

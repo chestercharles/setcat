@@ -9,6 +9,4 @@ RUN yarn install
 
 COPY . .
 
-RUN yarn compile
-
 CMD [ "yarn", "start:dev" ]

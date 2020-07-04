@@ -1,11 +1,14 @@
 {
   "name": "api",
   "version": "0.0.1",
+  "license": "MIT",
   "scripts": {
+    "setup": "yarn compile && yarn migration:run",
     "start:dev": "tsc -w --preserveWatchOutput & nodemon ./dist/src/run-server.js",
+    "start:dev:setup": "yarn setup && yarn start:dev",
+    "test:integration:dev": "tsc -w --preserveWatchOutput & jest --runInBand --watchAll",
+    "test:integration:dev:setup": "yarn setup && yarn test:integration:dev",
     "compile": "rm -rf ./dist && tsc",
-    "test:integration": "yarn compile && yarn migration:run && jest --runInBand",
-    "test:watch": "jest --watchAll",
     "migration:run": "typeorm migration:run",
     "migration:create": "typeorm migration:create -n"
   },
@@ -27,7 +30,6 @@
     "nodemon": "^2.0.4",
     "prettier": "1.17.0",
     "supertest": "^4.0.2",
-    "ts-jest": "^26.1.1",
     "typescript": "3.7.2"
   },
   "jest": {

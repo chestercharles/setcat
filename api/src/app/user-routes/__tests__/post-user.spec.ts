@@ -44,7 +44,7 @@ describe('POST user', function() {
     const email = 'porkchop@sandwhich.com';
 
     await repo.userRepo.save({
-      uuid: '12345',
+      uuid: '123456',
       username,
       email: 'email',
       password: 'password',
