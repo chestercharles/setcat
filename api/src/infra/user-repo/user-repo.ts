@@ -1,4 +1,4 @@
-import { Connection, Repository } from 'typeorm';
+import { Connection, Repository, FindConditions } from 'typeorm';
 import { User } from './user.model';
 
 let repository: Repository<User> = {} as any;
@@ -16,6 +16,8 @@ export const addUser = async (user: {
   return repository.save(user);
 };
 
-export const findUser = repository.find;
+export const findUser = async (query: FindConditions<User>) => {
+  return repository.find(query);
+};
 
 export type UserRepo = ReturnType<typeof initUserRepo>;

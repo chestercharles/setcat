@@ -27,7 +27,7 @@ export const validateParams = (
   );
 
   return TE.taskEither.map(
-    sequenceT(TE.taskEither)(validateUsername, validateEmail),
+    sequenceT(TE.taskEither)(validateEmail, validateUsername),
     () => params,
   );
 };
@@ -46,4 +46,3 @@ const ensureNoUsersExist = (message: string) => (users: User[]) =>
       return TE.right(true);
     },
   );
-  
