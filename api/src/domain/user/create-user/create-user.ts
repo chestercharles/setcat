@@ -1,4 +1,3 @@
-
 import * as TE from 'fp-ts/lib/TaskEither';
 import { makeUser } from './make-user';
 import { addUser, findUser } from '../../../infra/user-repo/user-repo';
@@ -19,7 +18,9 @@ export type CreateUserResult = {
   password: string;
 };
 
-export const createUser = (params: CreateUserArg) =>
+export const createUser = (
+  params: CreateUserArg,
+): TE.TaskEither<Error, CreateUserResult> =>
   pipe(
     params,
     validateParams,
@@ -33,4 +34,3 @@ export const createUser = (params: CreateUserArg) =>
       ),
     ),
   );
-

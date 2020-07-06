@@ -35,7 +35,9 @@ export const validateParams = (
 const makeUserFinder = (findUser: UserFinder) => (query: ValidationQuery) =>
   TE.tryCatch(() => findUser(query), (e: Error) => e);
 
-const ensureNoUsersExist = (message: string) => (users: User[]) =>
+const ensureNoUsersExist = (message: string) => (
+  users: User[],
+): TE.TaskEither<Error, boolean> =>
   pipe(
     users,
     u => u.length > 0,
