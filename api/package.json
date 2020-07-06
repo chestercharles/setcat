@@ -9,7 +9,7 @@
     "test:integration:dev": "tsc -w --preserveWatchOutput & jest --runInBand --watchAll",
     "test:integration:dev:setup": "yarn setup && yarn test:integration:dev",
     "test:unit:dev": "tsc -w --preserveWatchOutput & jest --runInBand --watchAll",
-    "test:unit:dev:setup": "yarn compile && yarn test:integration:dev",
+    "test:unit:dev:setup": "yarn compile && yarn test:unit:dev",
     "compile": "rm -rf ./dist && tsc",
     "migration:run": "typeorm migration:run",
     "migration:create": "typeorm migration:create -n"
@@ -18,11 +18,15 @@
     "@hapi/boom": "^9.1.0",
     "@hapi/hapi": "^19.1.1",
     "@hapi/joi": "^17.1.1",
+    "bcryptjs": "^2.4.3",
+    "fp-ts": "^2.6.7",
     "pg": "^8.2.1",
+    "rxjs": "^6.6.0",
     "typeorm": "^0.2.25",
     "uuid": "^8.2.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/hapi__boom": "^9.0.1",
     "@types/hapi__hapi": "^19.0.3",
     "@types/hapi__joi": "^17.1.3",

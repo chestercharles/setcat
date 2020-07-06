@@ -1,18 +1,19 @@
 import * as supertest from 'supertest';
 import { ApiServer, initServer } from '../../../server';
-import { initRepo, Repo } from '../../../infra/repo';
+import { initRepos, Repo } from '../../../infra/initRepos';
+import { addUser } from '../../../infra/user-repo/user-repo';
 
 describe('POST user', function() {
   let server: ApiServer;
   let repo: Repo;
 
   beforeAll(async () => {
-    repo = await initRepo();
-    server = await initServer(repo);
+    repo = await initRepos();
+    server = await initServer();
   });
 
   beforeEach(async () => {
-    await repo.userRepo.query('TRUNCATE TABLE "user";');
+    await repo.query('TRUNCATE TABLE "user";');
   });
 
   afterAll(async () => {
@@ -42,7 +43,7 @@ describe('POST user', function() {
     const username = 'Porky';
     const email = 'porkchop@sandwhich.com';
 
-    await repo.userRepo.save({
+    await addUser({
       uuid: '123456',
       username,
       email: 'email',
@@ -67,7 +68,7 @@ describe('POST user', function() {
     const email = 'porkchop@sandwhich.com';
     const password = 'Synapse1';
 
-    await repo.userRepo.save({
+    await addUser({
       uuid: '123456',
       username,
       email,

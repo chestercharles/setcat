@@ -1,31 +1,33 @@
 import { ServerRoute, RequestWithQuery } from '@hapi/hapi';
 import { object, string } from '@hapi/joi';
-import { Repo } from '../../infra/repo';
 import { notFound, internal } from '@hapi/boom';
-import { initFindUserByUuid } from '../../domain/user/find-user-by-uuid';
+import * as TE from 'fp-ts/lib/TaskEither';
+import { findUserByUuid } from '../../domain/user/find-user-by-uuid/find-user-by-uuid';
+import { pipe } from 'fp-ts/lib/function';
 
-export const initGetUser = (repo: Repo): ServerRoute => {
-  const findUserByUuid = initFindUserByUuid(repo.userRepo);
-  return {
-    method: 'GET',
-    path: '/user',
-    handler: async (
-      request: RequestWithQuery<GetUserReqDTO>,
-      h,
-    ): Promise<GetUserResDTO> => {
-      try {
-        const user = await findUserByUuid(request.query.uuid);
-        return user;
-      } catch (e) {
-        handleError(e);
-      }
+const queryValidator = object({
+  uuid: string().required(),
+});
+
+export const getUserRoute: ServerRoute = {
+  method: 'GET',
+  path: '/user',
+  handler: async (
+    request: RequestWithQuery<GetUserReqDTO>,
+    h,
+  ): Promise<GetUserResDTO> => {
+    const user = await pipe(
+      findUserByUuid(request.query.uuid),
+      TE.mapLeft(handleError),
+      TE.getOrElse(u => u),
+    )();
+    return user;
+  },
+  options: {
+    validate: {
+      query: queryValidator,
     },
-    options: {
-      validate: {
-        query: queryValidator,
-      },
-    },
-  };
+  },
 };
 
 const handleError = (e: Error) => {
@@ -35,7 +37,3 @@ const handleError = (e: Error) => {
     throw internal(e.message);
   }
 };
-
-const queryValidator = object({
-  uuid: string().required(),
-});

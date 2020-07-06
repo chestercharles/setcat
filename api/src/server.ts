@@ -1,11 +1,9 @@
 import { Server } from '@hapi/hapi';
-import { initApp } from './app/app';
-import { Repo } from './infra/repo';
+import { app } from './app/app';
 
-export const initServer = async (repo: Repo) => {
-  const app = initApp(repo);
+export const initServer = async () => {
   const server = new Server({
-    debug: false,
+    // debug: { request: ['error']},
     port: process.env.API_PORT,
     host: '0.0.0.0',
     routes: {

@@ -1,5 +1,5 @@
 import { initServer } from './server';
-import { initRepo } from './infra/repo';
+import { initRepos } from './infra/initRepos';
 
 (async () => {
   console.log(`Running environment ${process.env.NODE_ENV || 'dev'}`);
@@ -14,7 +14,7 @@ import { initRepo } from './infra/repo';
     process.exit(1);
   });
 
-  const repo = await initRepo();
-  const server = await initServer(repo);
+  await initRepos();
+  const server = await initServer();
   console.log(`Server running on ${server.info.uri}`);
 })();

@@ -1,43 +1,9 @@
 import { ServerRoute, RequestWithPayload } from '@hapi/hapi';
 import { object, string } from '@hapi/joi';
-import { Repo } from '../../infra/repo';
-import { initCreateUser } from '../../domain/user/create-user';
+import { createUser } from '../../domain/user/create-user/create-user';
 import { conflict, internal } from '@hapi/boom';
-
-export const initPostUserRoute = (repo: Repo): ServerRoute => {
-  const createUser = initCreateUser(repo.userRepo);
-  return {
-    method: 'POST',
-    path: '/user',
-    handler: async (
-      request: RequestWithPayload<PostUserReqDTO>,
-      h,
-    ): Promise<PostUserResDTO> => {
-      try {
-        const user = await createUser(request.payload);
-        return user;
-      } catch (e) {
-        handleException(e);
-      }
-    },
-    options: {
-      validate: {
-        payload: payloadValidationSchema,
-      },
-    },
-  };
-};
-
-const handleException = (e: Error) => {
-  if (
-    e.message === 'username is taken' ||
-    e.message === 'email is registered'
-  ) {
-    throw conflict(e.message);
-  } else {
-    throw internal(e.message);
-  }
-};
+import * as TE from 'fp-ts/lib/TaskEither';
+import { pipe } from 'fp-ts/lib/function';
 
 const payloadValidationSchema = object({
   username: string()
@@ -52,3 +18,35 @@ const payloadValidationSchema = object({
     .max(20)
     .required(),
 });
+
+export const postUserRoute: ServerRoute = {
+  method: 'POST',
+  path: '/user',
+  handler: async (
+    request: RequestWithPayload<PostUserReqDTO>,
+    h,
+  ): Promise<PostUserResDTO> => {
+    const createdUser = await pipe(
+      createUser(request.payload),
+      TE.mapLeft(handleException),
+      TE.getOrElse(u => u),
+    )();
+    return createdUser;
+  },
+  options: {
+    validate: {
+      payload: payloadValidationSchema,
+    },
+  },
+};
+
+const handleException = (e: Error) => {
+  if (
+    e.message === 'username is taken' ||
+    e.message === 'email is registered'
+  ) {
+    throw conflict(e.message);
+  } else {
+    throw internal(e.message);
+  }
+};
